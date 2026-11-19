@@ -24,7 +24,7 @@ Pipeline em Python e OpenCV para detecção, rastreamento e estimativa da pose p
 ## Estrutura do Repositório
 
 ```text
-├── rastreamento_pose.py              # Script principal do pipeline de visão computacional
+├── projeto_final.py              # Script principal do pipeline de visão computacional
 ├── requirements.txt                  # Dependências do projeto
 ├── video1.mp4                        # Vídeo de entrada 1
 ├── video2.mp4                        # Vídeo de entrada 2
@@ -42,9 +42,9 @@ Pipeline em Python e OpenCV para detecção, rastreamento e estimativa da pose p
    ```
 
 2. **Configure o vídeo de entrada:**
-   No início do arquivo `rastreamento_pose.py`, defina `CAMINHO_VIDEO` (`"video1.mp4"` ou `"video2.mp4"`) e o fator de resolução `ESCALA` (`1` para 4K nativo, `0.5` para Full HD ou `0.25` para qHD).
+   No início do arquivo `projeto_final.py`, defina `CAMINHO_VIDEO` (`"video1.mp4"` ou `"video2.mp4"`) e o fator de resolução `ESCALA` (`1` para 4K nativo, `0.5` para Full HD ou `0.25` para qHD).
 
 3. **Execute o script:**
    ```bash
-   python rastreamento_pose.py
+   python projeto_final.py
    ```
