@@ -48,3 +48,70 @@ Pipeline em Python e OpenCV para detecção, rastreamento e estimativa da pose p
    ```bash
    python projeto_final.py
    ```
+
+
+Cada pasta `Resultados_Projeto_<nome_do_video>/` contém:
+ 
+| Arquivo | Descrição |
+|---------|-----------|
+| `<video>_anotado.mp4` | Vídeo com contorno, centroide, seta de orientação e telemetria sobrepostos |
+| `<video>_poses.csv` | Poses e indicadores de validade por quadro |
+| `1_exemplos_intermediarios.png` | Três quadros ilustrando RGB → cromaticidade → máscara → pose |
+| `2_pose_plano_imagem.png` | Gráficos temporais de `u_c`, `v_c` e `θ_I` |
+| `3_pose_plano_mundo.png` | Gráficos temporais de `X_W`, `Y_W` e `ψ` |
+| `4_trajetoria_mundo.png` | Trajetória `X_W × Y_W` com início, fim e setas de orientação |
+| `5_validade_deteccoes.png` | Indicador temporal de validade das detecções |
+ 
+## Requisitos
+ 
+- Python 3.9+
+- Dependências (em `requirements.txt`):
+```
+numpy>=1.24.0
+opencv-python>=4.8.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+```
+ 
+## Como executar
+ 
+1. Crie e ative um ambiente virtual (opcional, recomendado) e instale as dependências:
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+ 
+2. Coloque o vídeo na mesma pasta do script e ajuste a variável `CAMINHO_VIDEO` no topo de `projeto_final.py`:
+```python
+CAMINHO_VIDEO = "video1.mp4"   # ou "video2.mp4"
+```
+ 
+   > **Atenção:** os arquivos originais têm extensão `.MP4` (maiúscula). Em Linux/macOS o nome é sensível a maiúsculas, então use exatamente o nome do arquivo (por exemplo `"video1.MP4"`) ou renomeie o arquivo.
+ 
+3. Execute:
+```bash
+python projeto_final.py
+```
+ 
+4. Repita o passo 2 e 3 para o outro vídeo. A pasta de saída é criada automaticamente com base no nome do vídeo.
+O script imprime no terminal as propriedades do vídeo (etapa 1) e o resumo quantitativo (etapa 6), além de exibir os gráficos com `plt.show()`. Em ambientes sem interface gráfica, use `MPLBACKEND=Agg python projeto_final.py`; as figuras continuam sendo salvas em disco.
+ 
+### Parâmetros principais
+ 
+Todos ficam no início de `projeto_final.py`:
+ 
+| Parâmetro | Valor | Função |
+|-----------|-------|--------|
+| `ESCALA` | `1` | Fator de escala espacial (1.0 = 4K nativo, 0.5 = Full HD, 0.25 = qHD). Reduzir acelera o processamento |
+| `HL` | matriz 3×3 | Homografia piso → imagem, calibrada em 3840×2160 |
+| `LIMIAR_CROMATICIDADE` | `0.09` | Limiar sobre `r − max(g, b)` na segmentação |
+| `CIRCULARIDADE_MIN` | `0.40` | Rejeita formas alongadas/côncavas (ex.: cruz vermelha no piso, C ≈ 0.31) |
+| `AREA_MIN_4K` | `600` px | Descarta ruídos pequenos (escalada com `ESCALA²`) |
+| `DIST_MAX_GATE` | `800 · ESCALA` px | Deslocamento máximo aceito entre quadros consecutivos |
+| `RAIO_ROI` | `900 · ESCALA` px | Meia-largura da janela de busca ao redor da última posição |
+| `THETA_INICIAL_REF` | `0 rad` | Referência para resolver a ambiguidade de 180° no primeiro quadro |
+ 
+
+
+ 
